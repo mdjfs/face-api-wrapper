@@ -1,3 +1,5 @@
+require('@tensorflow/tfjs-node');
+
 const {Canvas, Image, ImageData, loadImage} = require("canvas");
 const faceapi = require("face-api.js");
 const jimp = require("jimp");
