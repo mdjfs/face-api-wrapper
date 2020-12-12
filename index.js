@@ -1,8 +1,11 @@
-
 const {Canvas, Image, ImageData, loadImage} = require("canvas");
 const faceapi = require("face-api.js");
 const jimp = require("jimp");
 faceapi.env.monkeyPatch({Canvas, Image, ImageData});
+const path = require("path");
+const ssdMobilenetPath = path.join(__dirname, "./models/ssd_mobilenetv1");
+const faceLandmarkPath = path.join(__dirname, "./models/face_landmark_68");
+const faceRecognitionPath = path.join(__dirname, "./models/face_recognition");
 
 
 /**
@@ -10,9 +13,9 @@ faceapi.env.monkeyPatch({Canvas, Image, ImageData});
  * @returns {Object} Face api object 
  */
 async function getFaceApiAsync(){
-    await faceapi.nets.ssdMobilenetv1.loadFromDisk("./models/ssd_mobilenetv1");
-    await faceapi.nets.faceLandmark68Net.loadFromDisk("./models/face_landmark_68");
-    await faceapi.nets.faceRecognitionNet.loadFromDisk("./models/face_recognition");
+    await faceapi.nets.ssdMobilenetv1.loadFromDisk(ssdMobilenetPath);
+    await faceapi.nets.faceLandmark68Net.loadFromDisk(faceLandmarkPath);
+    await faceapi.nets.faceRecognitionNet.loadFromDisk(faceRecognitionPath);
     return faceapi;
 }
 
@@ -21,11 +24,11 @@ async function getFaceApiAsync(){
  * @param {CallableFunction<Error,Object>} callback 
  */
 function getFaceApi(callback){
-    faceapi.nets.ssdMobilenetv1.loadFromDisk("./models/ssd_mobilenetv1")
+    faceapi.nets.ssdMobilenetv1.loadFromDisk(ssdMobilenetPath)
     .then(_ => {
-        faceapi.nets.faceLandmark68Net.loadFromDisk("./models/face_landmark_68")
+        faceapi.nets.faceLandmark68Net.loadFromDisk(faceLandmarkPath)
         .then(_ => {
-            faceapi.nets.faceRecognitionNet.loadFromDisk("./models/face_recognition")
+            faceapi.nets.faceRecognitionNet.loadFromDisk(faceRecognitionPath)
             .then(_ => {    
                 callback(null, faceapi)
             }).catch(error => callback(error));
